@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Print Commit Message') {
+            steps {
+                script {
+                    // Use GIT_COMMIT environment variable to get the commit message
+                    def commitMessage = sh(script: "git log -1 --pretty=%B ${env.GIT_COMMIT}", returnStdout: true).trim()
+                    echo "Commit message for ${env.GIT_COMMIT}: ${commitMessage}"
+                }
+            }
+        }
+    }
+}
